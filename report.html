@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>School Transport · Maintenance Report</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <style>
+    :root {
+      --c-navy-900: #0a1e3c;
+      --c-navy-700: #143866;
+      --c-blue-600: #1e40af;
+      --c-blue-500: #2563eb;
+      --c-blue-400: #3b82f6;
+      --c-blue-50:  #eff5ff;
+      --c-amber-500:#b45309;
+      --c-amber-400:#f59e0b;
+      --c-amber-50: #fffbeb;
+      --c-green-600:#047857;
+      --c-green-500:#10b981;
+      --c-green-50: #ecfdf5;
+      --c-gray-900: #0f172a;
+      --c-gray-800: #1e293b;
+      --c-gray-700: #334155;
+      --c-gray-600: #475569;
+      --c-gray-500: #64748b;
+      --c-gray-400: #94a3b8;
+      --c-gray-300: #cbd5e1;
+      --c-gray-200: #e2e8f0;
+      --c-gray-100: #f1f5f9;
+      --c-gray-50:  #f8fafc;
+
+      --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.07), 0 2px 4px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.09), 0 4px 10px rgba(15, 23, 42, 0.05);
+
+      --radius-sm: 0.5rem;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+    }
+
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+
+    html, body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: var(--c-gray-50);
+      color: var(--c-gray-800);
+      font-size: 14.5px;
+      line-height: 1.55;
+      padding-bottom: 2.5rem;
+      letter-spacing: -0.005em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      letter-spacing: -0.02em;
+      color: var(--c-gray-900);
+      font-weight: 700;
+    }
+
+    /* ============ TOP NAV ============ */
+    .app-header {
+      background: var(--c-navy-900);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .app-header::after {
+      content: '';
+      position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+      background: linear-gradient(90deg, var(--c-blue-500) 0%, var(--c-amber-400) 50%, var(--c-blue-500) 100%);
+      opacity: 0.9;
+    }
+    .header-inner { padding: 1rem 1.5rem; position: relative; z-index: 2; }
+
+    .logo-wrap {
+      width: 52px; height: 52px; background: #fff; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      flex-shrink: 0; padding: 5px; overflow: hidden;
+    }
+    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    .app-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700; font-size: 1.18rem; line-height: 1.2;
+      margin: 0; color: #fff; letter-spacing: -0.02em;
+    }
+    .app-subtitle {
+      font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6); margin: 3px 0 0;
+    }
+    .header-actions .btn {
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.82rem;
+      border-radius: 0.6rem; padding: 0.5rem 1rem;
+      transition: all 0.15s ease; border: 1px solid transparent;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .btn-export {
+      background: var(--c-blue-500); color: #fff; border-color: var(--c-blue-500) !important;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+    }
+    .btn-export:hover {
+      background: #1d4ed8; border-color: #1d4ed8 !important; color: #fff;
+      transform: translateY(-1px); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.45);
+    }
+    .btn-export:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .btn-clear {
+      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9);
+      border-color: rgba(255,255,255,0.15) !important;
+    }
+    .btn-clear:hover {
+      background: rgba(255,255,255,0.12); color: #fff;
+      border-color: rgba(255,255,255,0.25) !important;
+    }
+
+    /* ============ LAYOUT ============ */
+    .main-container { max-width: 1180px; margin: 0 auto; padding: 0 1.25rem; }
+    .page-heading { padding: 1.75rem 0 1.25rem; }
+    .page-heading h2 { font-size: 1.5rem; font-weight: 700; margin: 0 0 0.3rem; }
+    .page-heading p { margin: 0; color: var(--c-gray-500); font-size: 0.9rem; }
+
+    /* ============ CARDS ============ */
+    .card {
+      border: 1px solid var(--c-gray-200);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      background: #fff; margin-bottom: 1.25rem;
+      overflow: hidden;
+      transition: box-shadow 0.2s ease;
+    }
+    .card:hover { box-shadow: var(--shadow-md); }
+    .card-header {
+      background: #fff; border-bottom: 1px solid var(--c-gray-200);
+      padding: 1rem 1.35rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600; font-size: 0.95rem;
+      color: var(--c-gray-900);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.65rem;
+    }
+    .card-header .section-label { display: flex; align-items: center; gap: 0.65rem; }
+    .section-icon {
+      width: 32px; height: 32px; border-radius: 0.5rem;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; flex-shrink: 0;
+    }
+    .section-icon.icon-vehicles { background: var(--c-blue-50); color: var(--c-blue-500); }
+    .section-icon.icon-supervisors { background: var(--c-green-50); color: var(--c-green-600); }
+    .card-body { padding: 1.15rem 1.35rem; }
+
+    /* ============ TOOLBAR ============ */
+    .toolbar {
+      background: var(--c-gray-50);
+      border-bottom: 1px solid var(--c-gray-200);
+      padding: 0.9rem 1.35rem;
+      display: flex; flex-wrap: wrap; gap: 0.65rem; align-items: center;
+    }
+    .search-wrap { position: relative; flex: 1 1 280px; min-width: 200px; }
+    .search-wrap i.bi-search {
+      position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%);
+      color: var(--c-gray-400); font-size: 0.9rem; pointer-events: none;
+    }
+    .search-wrap .clear-search {
+      position: absolute; right: 0.55rem; top: 50%; transform: translateY(-50%);
+      background: transparent; border: none; color: var(--c-gray-400);
+      padding: 0.25rem; border-radius: 0.35rem; line-height: 1;
+      cursor: pointer; display: none;
+    }
+    .search-wrap .clear-search:hover { color: var(--c-gray-700); background: var(--c-gray-100); }
+    .search-wrap.has-value .clear-search { display: inline-flex; }
+    .search-input {
+      font-family: 'Inter', sans-serif; width: 100%;
+      border: 1px solid var(--c-gray-200); border-radius: 0.5rem;
+      padding: 0.5rem 2rem 0.5rem 2.2rem;
+      font-size: 0.85rem; background: #fff; color: var(--c-gray-800);
+      font-weight: 500; transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .search-input::placeholder { color: var(--c-gray-400); font-weight: 400; }
+    .search-input:focus {
+      outline: none; border-color: var(--c-blue-400);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+    .filter-select {
+      font-family: 'Inter', sans-serif;
+      border: 1px solid var(--c-gray-200); border-radius: 0.5rem;
+      padding: 0.5rem 2rem 0.5rem 0.75rem; font-size: 0.85rem;
+      background: #fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") no-repeat right 0.6rem center/12px 12px;
+      color: var(--c-gray-700); font-weight: 500;
+      appearance: none; -webkit-appearance: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      min-width: 150px; cursor: pointer;
+    }
+    .filter-select:focus {
+      outline: none; border-color: var(--c-blue-400);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+    .toolbar .result-count {
+      font-size: 0.78rem; color: var(--c-gray-500); font-weight: 500;
+      margin-left: auto; white-space: nowrap;
+    }
+    .toolbar .result-count strong { color: var(--c-gray-800); font-weight: 700; }
+
+    /* ============ BUTTONS ============ */
+    .btn-icon-only {
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.78rem;
+      border-radius: 0.55rem; padding: 0.5rem 0.9rem;
+      letter-spacing: 0.005em; display: inline-flex; align-items: center; gap: 0.4rem;
+      transition: all 0.15s ease; border: 1px solid transparent; box-shadow: var(--shadow-xs);
+    }
+    .btn-icon-only:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+    .btn-icon-only i { font-size: 0.95rem; }
+    .btn-add-vehicle { background: var(--c-blue-500); color: #fff; border-color: var(--c-blue-500); }
+    .btn-add-vehicle:hover { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+    .btn-add-supervisor { background: #fff; color: var(--c-green-600); border-color: #a7f3d0; }
+    .btn-add-supervisor:hover { background: var(--c-green-50); border-color: #6ee7b7; color: var(--c-green-600); }
+    .btn-add-issue-inline {
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.75rem;
+      border-radius: 0.5rem; padding: 0.4rem 0.8rem;
+      background: #fff; color: var(--c-amber-500); border: 1px dashed #fcd34d;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      transition: all 0.15s ease;
+    }
+    .btn-add-issue-inline:hover {
+      background: var(--c-amber-50); border-color: var(--c-amber-400);
+      color: var(--c-amber-500); border-style: solid;
+    }
+
+    /* ============ VEHICLE GROUP ============ */
+    .vehicle-group {
+      background: #fff;
+      border: 1px solid var(--c-gray-200);
+      border-radius: var(--radius-md);
+      margin-bottom: 1.15rem;
+      overflow: hidden;
+      transition: box-shadow 0.15s ease;
+      animation: fadeIn 0.25s ease;
+    }
+    .vehicle-group:hover { box-shadow: var(--shadow-sm); }
+    .vehicle-group-header {
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      border-bottom: 1px solid var(--c-gray-200);
+      padding: 0.9rem 1.15rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.75rem; flex-wrap: wrap;
+    }
+    .vehicle-group-title {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600; font-size: 0.92rem;
+      color: var(--c-gray-900);
+    }
+    .vehicle-badge {
+      width: 36px; height: 36px; border-radius: 0.55rem;
+      background: linear-gradient(135deg, var(--c-blue-500), var(--c-blue-600));
+      color: #fff;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+    }
+    .vehicle-group-title .veh-main { display: flex; flex-direction: column; line-height: 1.3; }
+    .vehicle-group-title .veh-main .veh-no {
+      font-weight: 700; color: var(--c-gray-900); font-size: 0.98rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .vehicle-group-title .veh-main .veh-driver {
+      font-size: 0.75rem; color: var(--c-gray-500); font-weight: 500;
+    }
+    .vehicle-group-title .veh-main .veh-driver.empty { font-style: italic; color: var(--c-gray-400); }
+    .vehicle-group-body { padding: 1rem 1.15rem; }
+    .vehicle-fields {
+      background: #fff;
+      border: 1px solid var(--c-gray-200);
+      border-radius: var(--radius-md);
+      padding: 0.95rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* ============ FORM ============ */
+    .form-control, .form-control-sm {
+      font-family: 'Inter', sans-serif; border-radius: 0.5rem;
+      border: 1px solid var(--c-gray-200); background: #fff;
+      font-size: 0.85rem; padding: 0.5rem 0.7rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      color: var(--c-gray-800); font-weight: 500;
+    }
+    .form-control::placeholder { color: var(--c-gray-400); font-weight: 400; }
+    .form-control:focus, .form-control-sm:focus {
+      border-color: var(--c-blue-400);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+      background: #fff; outline: none;
+    }
+    label.small, .form-label {
+      font-family: 'Inter', sans-serif; font-weight: 600;
+      color: var(--c-gray-600) !important; font-size: 0.7rem !important;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 0.3rem !important;
+    }
+
+    /* ============ ISSUES ============ */
+    .issues-section {
+      background: var(--c-amber-50);
+      border: 1px solid #fde68a;
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1rem;
+    }
+    .issues-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;
+    }
+    .issues-section-title {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700; font-size: 0.78rem;
+      color: var(--c-amber-500);
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .issues-section-title .count-chip {
+      background: #fff; color: var(--c-amber-500);
+      font-size: 0.7rem; font-weight: 700;
+      padding: 0.15rem 0.5rem; border-radius: 1rem;
+      border: 1px solid #fcd34d;
+    }
+    .issue-item {
+      background: #fff;
+      border: 1px solid var(--c-gray-200);
+      border-left: 3px solid var(--c-amber-400);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.65rem;
+      animation: fadeIn 0.25s ease;
+    }
+    .issue-item:last-child { margin-bottom: 0; }
+    .empty-issues {
+      text-align: center; padding: 1rem 0.75rem;
+      color: var(--c-amber-500); font-size: 0.82rem;
+      background: rgba(255,255,255,0.6);
+      border-radius: 0.5rem; border: 1px dashed #fcd34d;
+    }
+    .empty-issues i { font-size: 1.1rem; margin-right: 0.4rem; vertical-align: middle; }
+
+    /* ============ SUPERVISORS ============ */
+    .supervisor-item {
+      background: #fbfefc;
+      border: 1px solid var(--c-gray-200);
+      border-left: 3px solid var(--c-green-500);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.1rem;
+      margin-bottom: 0.85rem;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============ CLICKABLE NUMBERS ============ */
+    .clickable-number {
+      color: var(--c-blue-500); font-weight: 600; text-decoration: none;
+      white-space: nowrap; font-variant-numeric: tabular-nums;
+      font-size: 0.82rem;
+      display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .clickable-number:hover { color: #1d4ed8; text-decoration: underline; }
+
+    /* ============ IMAGE ============ */
+    .image-preview {
+      max-width: 100%; max-height: 140px; border-radius: 0.5rem;
+      border: 1px solid var(--c-gray-200); object-fit: cover; cursor: pointer;
+    }
+    .issue-img-container {
+      background: var(--c-gray-50); border-radius: 0.5rem; padding: 0.5rem;
+      min-height: 70px; display: flex; align-items: center; justify-content: center;
+      border: 1px dashed var(--c-gray-300);
+    }
+    .camera-btn-group { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.6rem; }
+    .camera-btn-group .btn {
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.75rem;
+      border-radius: 0.5rem; padding: 0.4rem 0.75rem;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .search-highlight {
+      background: #fef3c7; color: #78350f;
+      padding: 0 2px; border-radius: 3px; font-weight: 700;
+    }
+
+    /* ============ FOOTNOTE ============ */
+    .footnote {
+      background: #fff; border: 1px solid var(--c-gray-200);
+      border-radius: var(--radius-lg); padding: 1.15rem 1.35rem;
+      margin-top: 0.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 0.75rem; box-shadow: var(--shadow-xs);
+      font-size: 0.88rem; color: var(--c-gray-600);
+    }
+    .footnote .footnote-label { display: flex; align-items: center; gap: 0.6rem; font-weight: 500; }
+    .footnote .footnote-label i { color: var(--c-navy-700); font-size: 1.05rem; }
+    .footnote .footnote-signature {
+      font-family: 'Lora', serif; font-style: italic;
+      color: var(--c-gray-500); font-size: 0.85rem;
+    }
+    .badge-count {
+      background: var(--c-navy-900); color: #fff;
+      font-weight: 600; font-size: 0.75rem;
+      padding: 0.4rem 0.85rem; border-radius: 0.5rem;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+    }
+
+    /* ============ EMPTY STATE ============ */
+    .empty-state {
+      text-align: center; padding: 1.5rem 1rem;
+      color: var(--c-gray-500); font-size: 0.85rem;
+    }
+    .empty-state i { display: block; font-size: 1.5rem; color: var(--c-gray-300); margin-bottom: 0.5rem; }
+
+    /* ============ MODALS ============ */
+    #cameraModal .modal-content, #imageViewModal .modal-content {
+      border-radius: var(--radius-lg); overflow: hidden; border: none; box-shadow: var(--shadow-lg);
+    }
+    #cameraModal .modal-header, #imageViewModal .modal-header {
+      background: var(--c-navy-900); color: #fff; border-bottom: none; padding: 1rem 1.25rem;
+    }
+    #cameraModal .modal-title, #imageViewModal .modal-title {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 1rem;
+    }
+    #cameraModal .modal-body {
+      background: #000; padding: 0; min-height: 260px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #cameraVideo { width: 100%; max-height: 65vh; object-fit: contain; background: #000; display: block; }
+    #cameraCanvas { display: none; }
+    #cameraError { color: #fff; padding: 2rem; text-align: center; font-size: 0.9rem; }
+    #cameraModal .modal-footer { background: var(--c-navy-900); border-top: none; padding: 0.9rem 1.25rem; }
+    .camera-controls { display: flex; gap: 0.5rem; justify-content: center; width: 100%; flex-wrap: wrap; }
+    .camera-controls .btn {
+      font-family: 'Inter', sans-serif; font-weight: 600;
+      border-radius: 0.55rem; padding: 0.5rem 1.1rem; font-size: 0.82rem;
+    }
+    #imageViewModal .btn-close { filter: invert(1) brightness(2); opacity: 0.8; }
+    .image-full-view { max-width: 100%; max-height: 85vh; border-radius: 0.5rem; }
+
+    /* ============================================================ */
+    /* ==================== PDF RENDER AREA ======================= */
+    /* ============================================================ */
+    /* Hidden off-screen by default — but visible to html2canvas during export */
+    #pdfRenderArea {
+      /* Keep the export DOM genuinely renderable. html2canvas can fail when
+         an ancestor/target is visibility:hidden or opacity:0. */
+      position: fixed;
+      left: -10000px;
+      top: 0;
+      width: 794px;
+      min-height: 100px;
+      background: #ffffff;
+      padding: 24px;
+      font-family: 'Inter', sans-serif;
+      color: var(--c-gray-800);
+      z-index: 2147483000;
+      opacity: 1;
+      pointer-events: none;
+      visibility: visible;
+      overflow: visible;
+    }
+
+    body.pdf-rendering #pdfRenderArea {
+      left: 0 !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      z-index: 2147483000 !important;
+      pointer-events: none !important;
+    }
+
+    body.pdf-rendering { overflow: hidden; }
+
+    /* ====== PDF COVER ====== */
+    .pdf-cover-inner {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+      page-break-after: always;
+      break-after: page;
+      margin-bottom: 24px;
+    }
+    .pdf-cover-header {
+      background: linear-gradient(135deg, #0a1e3c 0%, #143866 100%);
+      color: #fff;
+      padding: 32px 36px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      position: relative;
+    }
+    .pdf-cover-header::after {
+      content: '';
+      position: absolute; left: 0; right: 0; bottom: 0; height: 4px;
+      background: linear-gradient(90deg, #2563eb 0%, #f59e0b 50%, #2563eb 100%);
+    }
+    .pdf-cover-logo {
+      width: 90px; height: 90px;
+      background: #fff;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 10px;
+      flex-shrink: 0;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    .pdf-cover-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .pdf-cover-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800; font-size: 1.55rem;
+      line-height: 1.15; letter-spacing: -0.02em;
+      margin: 0 0 0.35rem; color: #fff;
+    }
+    .pdf-cover-sub {
+      font-family: 'Inter', sans-serif; font-size: 0.75rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.65); font-weight: 500; margin: 0;
+    }
+    .pdf-cover-school {
+      font-family: 'Lora', serif; font-style: italic;
+      color: rgba(255,255,255,0.85); font-size: 0.88rem;
+      margin-top: 0.55rem;
+    }
+    .pdf-cover-body { padding: 28px 36px 32px; }
+    .pdf-section-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700; font-size: 0.72rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: #2563eb;
+      margin: 0 0 0.85rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #f1f5f9;
+    }
+    .pdf-info-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 14px 28px; margin-bottom: 28px;
+    }
+    .pdf-info-item { display: flex; flex-direction: column; gap: 2px; }
+    .pdf-info-label {
+      font-family: 'Inter', sans-serif; font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #64748b; font-weight: 600;
+    }
+    .pdf-info-value {
+      font-family: 'Inter', sans-serif; font-size: 0.92rem;
+      color: #0f172a; font-weight: 600;
+    }
+    .pdf-summary-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; margin-bottom: 28px;
+    }
+    .pdf-stat {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 8px; padding: 12px 14px;
+    }
+    .pdf-stat-value {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800; font-size: 1.4rem;
+      line-height: 1; color: #0a1e3c; margin-bottom: 0.25rem;
+    }
+    .pdf-stat-label {
+      font-family: 'Inter', sans-serif; font-size: 0.65rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #64748b; font-weight: 600;
+    }
+    .pdf-legend {
+      background: #f8fafc; border-left: 3px solid #2563eb;
+      border-radius: 6px; padding: 12px 16px;
+      font-size: 0.82rem; color: #475569; line-height: 1.5;
+    }
+    .pdf-legend strong { color: #0f172a; }
+    .pdf-signature-row {
+      margin-top: 32px; padding-top: 24px;
+      border-top: 1px dashed #cbd5e1;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      gap: 16px;
+    }
+    .pdf-signature-block { text-align: center; min-width: 200px; }
+    .pdf-signature-line {
+      border-top: 1px solid #94a3b8;
+      padding-top: 6px; margin-top: 40px;
+      font-family: 'Inter', sans-serif; font-size: 0.75rem;
+      color: #475569; letter-spacing: 0.06em;
+      text-transform: uppercase; font-weight: 600;
+    }
+    .pdf-signature-role {
+      font-family: 'Lora', serif; font-style: italic;
+      color: #64748b; font-size: 0.82rem; margin-top: 2px;
+    }
+    .pdf-footer {
+      margin-top: 32px; padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.72rem; color: #64748b; letter-spacing: 0.04em;
+    }
+    .pdf-footer .pdf-footer-brand {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700; color: #0a1e3c; letter-spacing: -0.01em;
+      font-size: 0.78rem;
+    }
+
+    /* ====== PDF BODY ====== */
+    .pdf-body { background: #fff; padding: 0; }
+    .pdf-body-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 0 16px;
+      border-bottom: 2px solid #0a1e3c;
+      margin-bottom: 20px;
+    }
+    .pdf-body-header-left { display: flex; align-items: center; gap: 12px; }
+    .pdf-body-logo {
+      width: 44px; height: 44px;
+      background: #fff; border: 1px solid #e2e8f0;
+      border-radius: 8px; padding: 4px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pdf-body-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .pdf-body-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700; font-size: 1rem;
+      color: #0a1e3c; margin: 0; line-height: 1.2;
+    }
+    .pdf-body-sub {
+      font-family: 'Inter', sans-serif; font-size: 0.68rem;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: #64748b; font-weight: 500; margin: 2px 0 0;
+    }
+    .pdf-body-meta {
+      text-align: right; font-family: 'Inter', sans-serif;
+      font-size: 0.72rem; color: #64748b; line-height: 1.5;
+    }
+    .pdf-body-meta strong { color: #0f172a; }
+
+    .pdf-vehicle-block {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .pdf-vehicle-head {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+    }
+    .pdf-vehicle-head-left { display: flex; align-items: center; gap: 10px; }
+    .pdf-vehicle-head-badge {
+      width: 30px; height: 30px; border-radius: 6px;
+      background: #2563eb; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 700;
+    }
+    .pdf-vehicle-head-main { line-height: 1.25; }
+    .pdf-vehicle-head-no {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700; font-size: 0.95rem; color: #0f172a;
+    }
+    .pdf-vehicle-head-driver {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem; color: #64748b; font-weight: 500;
+    }
+    .pdf-vehicle-head-count {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem; font-weight: 600;
+      color: #b45309;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      padding: 4px 10px; border-radius: 6px;
+      white-space: nowrap;
+    }
+    .pdf-vehicle-fields {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 14px 16px;
+      background: #fff;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .pdf-vehicle-field { display: flex; flex-direction: column; gap: 2px; }
+    .pdf-vehicle-field-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #64748b; font-weight: 600;
+    }
+    .pdf-vehicle-field-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem; color: #0f172a; font-weight: 600;
+      word-break: break-word;
+    }
+
+    .pdf-issues-block {
+      padding: 14px 16px 16px;
+      background: #fffbeb;
+    }
+    .pdf-issues-block-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700; font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: #b45309; margin: 0 0 10px;
+    }
+    .pdf-issue-row {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-left: 3px solid #f59e0b;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .pdf-issue-row:last-child { margin-bottom: 0; }
+    .pdf-issue-content { display: flex; gap: 14px; align-items: flex-start; }
+    .pdf-issue-text { flex: 1; min-width: 0; }
+    .pdf-issue-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #64748b; font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .pdf-issue-description {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem; color: #0f172a; font-weight: 500;
+      line-height: 1.45;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .pdf-issue-description.empty { color: #94a3b8; font-style: italic; }
+    .pdf-issue-photo {
+      width: 130px; height: 100px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #f8fafc;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pdf-issue-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pdf-issue-photo .no-photo {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem; color: #94a3b8; font-style: italic;
+    }
+    .pdf-no-issues {
+      background: #fff; border: 1px dashed #fcd34d;
+      border-radius: 6px; padding: 10px 14px;
+      font-family: 'Inter', sans-serif; font-size: 0.78rem;
+      color: #b45309; font-style: italic;
+    }
+
+    .pdf-supervisors-block {
+      background: #fff; border: 1px solid #e2e8f0;
+      border-radius: 10px; overflow: hidden;
+      margin-top: 20px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .pdf-supervisors-head {
+      background: #ecfdf5; border-bottom: 1px solid #e2e8f0;
+      padding: 12px 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700; font-size: 0.78rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: #047857;
+    }
+    .pdf-supervisors-list {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 10px; padding: 14px 16px;
+    }
+    .pdf-supervisor-card {
+      background: #fbfefc; border: 1px solid #e2e8f0;
+      border-left: 3px solid #10b981;
+      border-radius: 6px; padding: 9px 12px;
+    }
+    .pdf-supervisor-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem; font-weight: 600;
+      color: #0f172a; margin-bottom: 2px;
+    }
+    .pdf-supervisor-mobile {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem; color: #2563eb;
+      font-weight: 500;
+    }
+    .pdf-final-footer {
+      margin-top: 24px; padding-top: 14px;
+      border-top: 1px solid #e2e8f0;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem; color: #64748b;
+      letter-spacing: 0.04em;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 768px) {
+      .app-title { font-size: 1rem; }
+      .app-subtitle { font-size: 0.66rem; letter-spacing: 0.08em; }
+      .logo-wrap { width: 44px; height: 44px; border-radius: 10px; }
+      .card-header { padding: 0.9rem 1.1rem; font-size: 0.9rem; }
+      .card-body { padding: 1rem; }
+      .toolbar { padding: 0.8rem 1rem; }
+      .header-inner { padding: 0.9rem 1rem; }
+      .page-heading { padding: 1.25rem 0 1rem; }
+      .page-heading h2 { font-size: 1.2rem; }
+      .footnote { padding: 1rem 1.1rem; }
+    }
+    @media (max-width: 576px) {
+      body { font-size: 14px; }
+      .app-title { font-size: 0.95rem; }
+      .app-subtitle { font-size: 0.62rem; }
+      .logo-wrap { width: 40px; height: 40px; padding: 4px; }
+      .header-actions .btn { padding: 0.45rem 0.75rem; font-size: 0.75rem; }
+      .btn-icon-only { padding: 0.45rem 0.75rem; font-size: 0.72rem; }
+      .card-header { flex-direction: column; align-items: stretch; }
+      .card-header .btn-icon-only { justify-content: center; }
+      .footnote { flex-direction: column; align-items: flex-start; }
+      .toolbar .result-count { margin-left: 0; flex-basis: 100%; }
+      .filter-select { min-width: 0; width: 100%; }
+      .vehicle-group-header { padding: 0.75rem 0.9rem; }
+      .vehicle-group-body { padding: 0.85rem 0.9rem; }
+      .vehicle-fields { padding: 0.75rem 0.85rem; }
+      .issues-section { padding: 0.75rem 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============ TOP NAV ============ -->
+<header class="app-header">
+  <div class="header-inner">
+    <div class="main-container d-flex flex-wrap align-items-center justify-content-between gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="logo-wrap">
+          <img src="logom1.webp" alt="School Logo"
+               onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'bi bi-mortarboard-fill\' style=\'font-size:1.4rem;color:#0b1f3a;\'></i>'">
+        </div>
+        <div>
+          <h1 class="app-title">School Transport</h1>
+          <p class="app-subtitle">Maintenance Report</p>
+        </div>
+      </div>
+      <div class="header-actions d-flex gap-2 flex-wrap">
+        <button class="btn btn-export" id="exportPdfBtn" type="button">
+          <i class="bi bi-file-earmark-pdf-fill"></i> <span class="d-none d-sm-inline">Export PDF</span><span class="d-inline d-sm-none">PDF</span>
+        </button>
+        <button class="btn btn-clear" id="clearAllBtn" type="button">
+          <i class="bi bi-trash3-fill"></i> <span class="d-none d-sm-inline">Clear</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MAIN ============ -->
+<div class="main-container">
+  <div class="page-heading">
+    <h2>Maintenance Overview</h2>
+    <p>Add a vehicle &amp; driver first, then log each maintenance issue directly under that vehicle.</p>
+  </div>
+
+  <div id="reportContent">
+    <!-- VEHICLES -->
+    <div class="card">
+      <div class="card-header">
+        <span class="section-label">
+          <span class="section-icon icon-vehicles"><i class="bi bi-truck-front-fill"></i></span>
+          Vehicles, Drivers &amp; Their Issues
+        </span>
+        <button class="btn btn-icon-only btn-add-vehicle" id="addVehicleBtn" type="button">
+          <i class="bi bi-plus-lg"></i> Add Vehicle
+        </button>
+      </div>
+
+      <div class="toolbar" id="vehicleToolbar">
+        <div class="search-wrap" id="vehicleSearchWrap">
+          <i class="bi bi-search"></i>
+          <input type="text" class="search-input" id="vehicleSearchInput" placeholder="Search by vehicle no., driver, mobile, type…" autocomplete="off" spellcheck="false">
+          <button class="clear-search" id="vehicleSearchClear" type="button" title="Clear search">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <select class="filter-select" id="vehicleTypeFilter" aria-label="Filter by vehicle type">
+          <option value="">All vehicle types</option>
+        </select>
+        <select class="filter-select" id="vehicleSortSelect" aria-label="Sort vehicles">
+          <option value="recent">Sort: Recently added</option>
+          <option value="vehicle-az">Vehicle no. (A → Z)</option>
+          <option value="vehicle-za">Vehicle no. (Z → A)</option>
+          <option value="driver-az">Driver name (A → Z)</option>
+          <option value="driver-za">Driver name (Z → A)</option>
+          <option value="type-az">Vehicle type (A → Z)</option>
+        </select>
+        <span class="result-count" id="vehicleResultCount"></span>
+      </div>
+
+      <div class="card-body" id="vehicleList"></div>
+    </div>
+
+    <!-- SUPERVISORS -->
+    <div class="card">
+      <div class="card-header">
+        <span class="section-label">
+          <span class="section-icon icon-supervisors"><i class="bi bi-person-badge-fill"></i></span>
+          Supervisors
+        </span>
+        <button class="btn btn-icon-only btn-add-supervisor" id="addSupervisorBtn" type="button">
+          <i class="bi bi-plus-lg"></i> Add Supervisor
+        </button>
+      </div>
+      <div class="card-body" id="supervisorList"></div>
+    </div>
+
+    <!-- FOOTNOTE -->
+    <div class="footnote">
+      <span class="footnote-label">
+        <i class="bi bi-clipboard2-check"></i>
+        Maintenance report by supervisor
+      </span>
+      <span class="footnote-signature">— Verified and approved by the assigned supervisor</span>
+      <span class="badge-count" id="supervisorCountBadge">
+        <i class="bi bi-people-fill"></i> 0 Supervisors
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden PDF render area -->
+<div id="pdfRenderArea" aria-hidden="true"></div>
+
+<!-- CAMERA MODAL -->
+<div class="modal fade" id="cameraModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-camera-video-fill me-2"></i>Take Photo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <video id="cameraVideo" autoplay playsinline muted></video>
+        <canvas id="cameraCanvas"></canvas>
+        <div id="cameraError" style="display:none;"></div>
+      </div>
+      <div class="modal-footer">
+        <div class="camera-controls">
+          <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i> Cancel
+          </button>
+          <button type="button" class="btn btn-outline-light" id="switchCameraBtn">
+            <i class="bi bi-arrow-repeat me-1"></i> Flip
+          </button>
+          <button type="button" class="btn btn-primary px-4" id="capturePhotoBtn">
+            <i class="bi bi-camera-fill me-1"></i> Capture
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMAGE VIEWER MODAL -->
+<div class="modal fade" id="imageViewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-image-fill me-2"></i>Issue Photo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center bg-dark p-3">
+        <img id="imageFullView" class="image-full-view" src="" alt="Issue image">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const STORAGE_KEY = 'schoolTransportReport';
+  const MIGRATION_KEY = 'schoolTransportReport_migrated_v2';
+  const LOGO_PATH = 'logom1.webp';
+  const LOGO_FALLBACK_SVG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+      <rect width="64" height="64" rx="12" fill="#0a1e3c"/>
+      <path d="M20 44 L20 26 L32 18 L44 26 L44 44 Z" fill="#f59e0b"/>
+      <circle cx="32" cy="32" r="4" fill="#fff"/>
+    </svg>`
+  );
+
+  let state = { vehicles: [], supervisors: [] };
+  let vehicleSearchTerm = '';
+  let vehicleTypeFilterValue = '';
+  let vehicleSortValue = 'recent';
+
+  let cameraStream = null;
+  let currentFacingMode = 'environment';
+  let activeIssueRef = null;
+  let cameraModal = null;
+  let imageViewModal = null;
+
+  let cachedLogoDataUrl = null;
+
+  const vehicleListEl = document.getElementById('vehicleList');
+  const supervisorListEl = document.getElementById('supervisorList');
+  const supervisorCountBadge = document.getElementById('supervisorCountBadge');
+  const cameraModalEl = document.getElementById('cameraModal');
+  const cameraVideo = document.getElementById('cameraVideo');
+  const cameraCanvas = document.getElementById('cameraCanvas');
+  const cameraError = document.getElementById('cameraError');
+  const imageViewModalEl = document.getElementById('imageViewModal');
+  const imageFullView = document.getElementById('imageFullView');
+
+  const vehicleSearchWrap = document.getElementById('vehicleSearchWrap');
+  const vehicleSearchInput = document.getElementById('vehicleSearchInput');
+  const vehicleSearchClear = document.getElementById('vehicleSearchClear');
+  const vehicleTypeFilter = document.getElementById('vehicleTypeFilter');
+  const vehicleSortSelect = document.getElementById('vehicleSortSelect');
+  const vehicleResultCount = document.getElementById('vehicleResultCount');
+
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).substring(2, 6); }
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+  }
+  function escapeRegExp(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function highlight(text, term) {
+    const safe = escapeHtml(text);
+    if (!term) return safe;
+    const re = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+    return safe.replace(re, '<span class="search-highlight">$1</span>');
+  }
+
+  // Preload logo as data URL
+  function preloadLogo() {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        try {
+          const c = document.createElement('canvas');
+          c.width = img.naturalWidth || 200;
+          c.height = img.naturalHeight || 200;
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          cachedLogoDataUrl = c.toDataURL('image/png');
+          resolve(cachedLogoDataUrl);
+        } catch (e) {
+          cachedLogoDataUrl = LOGO_FALLBACK_SVG;
+          resolve(cachedLogoDataUrl);
+        }
+      };
+      img.onerror = () => {
+        cachedLogoDataUrl = LOGO_FALLBACK_SVG;
+        resolve(cachedLogoDataUrl);
+      };
+      img.src = LOGO_PATH;
+    });
+  }
+
+  function loadState() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed.vehicles) && Array.isArray(parsed.issues) && !localStorage.getItem(MIGRATION_KEY)) {
+          state.vehicles = parsed.vehicles.map(v => ({
+            id: v.id, vehicleNumber: v.vehicleNumber || '', vehicleType: v.vehicleType || '',
+            driverName: v.driverName || '', mobileNumber: v.mobileNumber || '', issues: []
+          }));
+          state.supervisors = Array.isArray(parsed.supervisors) ? parsed.supervisors : [];
+          if (state.vehicles.length > 0) {
+            state.vehicles[0].issues = parsed.issues.map(i => ({
+              id: i.id, description: i.description || '', imageData: i.imageData || null
+            }));
+          }
+          localStorage.setItem(MIGRATION_KEY, 'true');
+          saveState();
+        } else {
+          state.vehicles = Array.isArray(parsed.vehicles) ? parsed.vehicles.map(v => ({
+            id: v.id, vehicleNumber: v.vehicleNumber || '', vehicleType: v.vehicleType || '',
+            driverName: v.driverName || '', mobileNumber: v.mobileNumber || '',
+            issues: Array.isArray(v.issues) ? v.issues : []
+          })) : [];
+          state.supervisors = Array.isArray(parsed.supervisors) ? parsed.supervisors : [];
+        }
+      } catch (e) { console.warn('Parse error', e); }
+    }
+  }
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch (e) { console.warn('Storage error', e); alert('Storage is full! Consider removing old images.'); }
+  }
+
+  function emptyState(icon, msg) {
+    return `<div class="empty-state"><i class="bi ${icon}"></i>${msg}</div>`;
+  }
+
+  // ---------- FILTER / SORT ----------
+  function getVehicleTypes() {
+    const set = new Set();
+    state.vehicles.forEach(v => {
+      const t = (v.vehicleType || '').trim();
+      if (t) set.add(t);
+    });
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }
+  function refreshVehicleTypeFilter() {
+    const types = getVehicleTypes();
+    const current = vehicleTypeFilterValue;
+    vehicleTypeFilter.innerHTML = '<option value="">All vehicle types</option>' +
+      types.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+    if (current && types.includes(current)) vehicleTypeFilter.value = current;
+    else { vehicleTypeFilter.value = ''; vehicleTypeFilterValue = ''; }
+  }
+  function getFilteredVehicles() {
+    const term = vehicleSearchTerm.trim().toLowerCase();
+    let list = state.vehicles.slice();
+    if (vehicleTypeFilterValue) {
+      list = list.filter(v => (v.vehicleType || '').trim().toLowerCase() === vehicleTypeFilterValue.toLowerCase());
+    }
+    if (term) {
+      list = list.filter(v => {
+        const fields = [v.vehicleNumber || '', v.vehicleType || '', v.driverName || '', v.mobileNumber || ''];
+        const issueMatches = (v.issues || []).some(i => (i.description || '').toLowerCase().includes(term));
+        return fields.some(f => f.toLowerCase().includes(term)) || issueMatches;
+      });
+    }
+    switch (vehicleSortValue) {
+      case 'vehicle-az': list.sort((a, b) => (a.vehicleNumber || '').localeCompare(b.vehicleNumber || '')); break;
+      case 'vehicle-za': list.sort((a, b) => (b.vehicleNumber || '').localeCompare(a.vehicleNumber || '')); break;
+      case 'driver-az': list.sort((a, b) => (a.driverName || '').localeCompare(b.driverName || '')); break;
+      case 'driver-za': list.sort((a, b) => (b.driverName || '').localeCompare(a.driverName || '')); break;
+      case 'type-az': list.sort((a, b) => (a.vehicleType || '').localeCompare(b.vehicleType || '')); break;
+    }
+    return list;
+  }
+
+  // ---------- RENDER VEHICLES ----------
+  function renderVehicles() {
+    vehicleListEl.innerHTML = '';
+    const total = state.vehicles.length;
+    if (total === 0) {
+      vehicleListEl.innerHTML = emptyState('bi-truck', 'No vehicles added yet. Click "Add Vehicle" to begin.');
+      vehicleResultCount.innerHTML = '';
+      return;
+    }
+    const filtered = getFilteredVehicles();
+    if (vehicleSearchTerm || vehicleTypeFilterValue) {
+      vehicleResultCount.innerHTML = `Showing <strong>${filtered.length}</strong> of <strong>${total}</strong>`;
+    } else {
+      vehicleResultCount.innerHTML = `<strong>${total}</strong> vehicle${total !== 1 ? 's' : ''}`;
+    }
+    if (filtered.length === 0) {
+      vehicleListEl.innerHTML = emptyState('bi-search', 'No vehicles match your search or filter.');
+      return;
+    }
+
+    const term = vehicleSearchTerm.trim();
+    filtered.forEach(v => {
+      const group = document.createElement('div');
+      group.className = 'vehicle-group';
+      group.dataset.vehicleId = v.id;
+      const issueCount = (v.issues || []).length;
+      const totalPhotos = (v.issues || []).filter(i => i.imageData).length;
+
+      group.innerHTML = `
+        <div class="vehicle-group-header">
+          <div class="vehicle-group-title">
+            <span class="vehicle-badge"><i class="bi bi-truck-front-fill"></i></span>
+            <div class="veh-main">
+              <span class="veh-no">${v.vehicleNumber ? highlight(v.vehicleNumber, term) : '<em style="color:#94a3b8;font-weight:500;">Untitled vehicle</em>'}</span>
+              <span class="veh-driver ${v.driverName ? '' : 'empty'}">
+                ${v.driverName ? highlight(v.driverName, term) : 'No driver assigned'}
+                ${v.vehicleType ? ' · ' + highlight(v.vehicleType, term) : ''}
+              </span>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="issues-section-title" style="color:var(--c-amber-500);font-size:0.75rem;">
+              <i class="bi bi-exclamation-triangle-fill"></i> ${issueCount} issue${issueCount !== 1 ? 's' : ''}
+              ${totalPhotos ? `<span style="color:var(--c-gray-500);font-weight:500;margin-left:0.3rem;">· ${totalPhotos} photo${totalPhotos !== 1 ? 's' : ''}</span>` : ''}
+            </span>
+            <button class="btn btn-outline-danger btn-sm remove-vehicle" type="button" style="font-size:0.72rem;padding:0.35rem 0.65rem;">
+              <i class="bi bi-trash3"></i> Remove
+            </button>
+          </div>
+        </div>
+
+        <div class="vehicle-group-body">
+          <div class="vehicle-fields">
+            <div class="row g-3 align-items-end">
+              <div class="col-md-3 col-6">
+                <label class="small">Vehicle Number</label>
+                <input type="text" class="form-control form-control-sm vehicle-number" value="${escapeHtml(v.vehicleNumber)}" placeholder="KA-01-AB-1234">
+              </div>
+              <div class="col-md-3 col-6">
+                <label class="small">Vehicle Type</label>
+                <input type="text" class="form-control form-control-sm vehicle-type" value="${escapeHtml(v.vehicleType)}" placeholder="Bus / Van">
+              </div>
+              <div class="col-md-3 col-6">
+                <label class="small">Driver Name</label>
+                <input type="text" class="form-control form-control-sm driver-name" value="${escapeHtml(v.driverName)}" placeholder="Full name">
+              </div>
+              <div class="col-md-3 col-6">
+                <label class="small">Mobile</label>
+                <input type="tel" class="form-control form-control-sm driver-mobile" value="${escapeHtml(v.mobileNumber)}" placeholder="Phone number">
+                <div class="mt-1" data-tel-link>
+                  ${v.mobileNumber ? `<a href="tel:${encodeURIComponent(v.mobileNumber)}" class="clickable-number"><i class="bi bi-telephone-fill"></i> ${highlight(v.mobileNumber, term)}</a>` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="issues-section" data-issues-container>
+            <div class="issues-section-header">
+              <span class="issues-section-title">
+                <i class="bi bi-wrench-adjustable-circle-fill"></i>
+                Maintenance Issues
+                <span class="count-chip" data-issue-count>${issueCount}</span>
+              </span>
+              <button type="button" class="btn-add-issue-inline add-issue-to-vehicle" data-vehicle-id="${v.id}">
+                <i class="bi bi-plus-lg"></i> Add Issue
+              </button>
+            </div>
+            <div class="issues-list" data-issues-list></div>
+          </div>
+        </div>`;
+
+      const fields = group.querySelector('.vehicle-fields');
+      fields.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', () => {
+          const veh = state.vehicles.find(x => x.id === v.id);
+          if (!veh) return;
+          if (inp.classList.contains('vehicle-number')) veh.vehicleNumber = inp.value;
+          else if (inp.classList.contains('vehicle-type')) veh.vehicleType = inp.value;
+          else if (inp.classList.contains('driver-name')) veh.driverName = inp.value;
+          else if (inp.classList.contains('driver-mobile')) {
+            veh.mobileNumber = inp.value;
+            const telWrap = fields.querySelector('[data-tel-link]');
+            if (inp.value) {
+              telWrap.innerHTML = `<a href="tel:${encodeURIComponent(inp.value)}" class="clickable-number"><i class="bi bi-telephone-fill"></i> ${escapeHtml(inp.value)}</a>`;
+            } else telWrap.innerHTML = '';
+          }
+          const headNo = group.querySelector('.veh-no');
+          const headDrv = group.querySelector('.veh-driver');
+          if (inp.classList.contains('vehicle-number')) {
+            headNo.innerHTML = veh.vehicleNumber ? escapeHtml(veh.vehicleNumber) : '<em style="color:#94a3b8;font-weight:500;">Untitled vehicle</em>';
+          }
+          if (inp.classList.contains('driver-name') || inp.classList.contains('vehicle-type')) {
+            const dn = veh.driverName || 'No driver assigned';
+            const vt = veh.vehicleType ? ' · ' + veh.vehicleType : '';
+            headDrv.className = 'veh-driver ' + (veh.driverName ? '' : 'empty');
+            headDrv.textContent = dn + vt;
+          }
+          saveState();
+        });
+        if (inp.classList.contains('vehicle-type')) {
+          inp.addEventListener('blur', () => refreshVehicleTypeFilter());
+        }
+      });
+
+      group.querySelector('.add-issue-to-vehicle').addEventListener('click', () => addIssueToVehicle(v.id));
+      group.querySelector('.remove-vehicle').addEventListener('click', () => {
+        if (confirm(`Remove vehicle "${v.vehicleNumber || 'Untitled'}" and all its ${issueCount} issue(s)?`)) {
+          state.vehicles = state.vehicles.filter(x => x.id !== v.id);
+          saveState();
+          refreshVehicleTypeFilter();
+          renderVehicles();
+        }
+      });
+
+      const issuesList = group.querySelector('[data-issues-list]');
+      renderIssuesInto(issuesList, v, term);
+      vehicleListEl.appendChild(group);
+    });
+  }
+
+  function renderIssuesInto(container, vehicle, term = '') {
+    container.innerHTML = '';
+    const issues = vehicle.issues || [];
+    if (issues.length === 0) {
+      container.innerHTML = `<div class="empty-issues"><i class="bi bi-info-circle"></i>No maintenance issues recorded for this vehicle yet.</div>`;
+      return;
+    }
+    issues.forEach(issue => {
+      const item = document.createElement('div');
+      item.className = 'issue-item';
+      item.dataset.issueId = issue.id;
+      item.innerHTML = `
+        <div class="row g-3 align-items-start">
+          <div class="col-md-7">
+            <label class="small">Issue Description</label>
+            <textarea class="form-control form-control-sm issue-desc" rows="2" placeholder="Describe the problem in detail">${escapeHtml(issue.description)}</textarea>
+            <div class="camera-btn-group">
+              <button type="button" class="btn btn-primary open-camera-btn">
+                <i class="bi bi-camera-fill"></i> Take Photo
+              </button>
+              <button type="button" class="btn btn-outline-secondary pick-file-btn">
+                <i class="bi bi-upload"></i> From Gallery
+              </button>
+              <input type="file" class="gallery-input d-none" accept="image/*">
+            </div>
+          </div>
+          <div class="col-md-5">
+            <label class="small">Attached Photo</label>
+            <div class="issue-img-container">
+              ${issue.imageData
+                ? `<img src="${issue.imageData}" class="image-preview" alt="issue image">`
+                : '<span class="text-muted small">No image attached</span>'}
+            </div>
+            ${issue.imageData
+              ? `<div class="text-end mt-1"><button class="btn btn-link btn-sm text-danger p-0 remove-image-btn" type="button"><i class="bi bi-trash3"></i> Remove image</button></div>`
+              : ''}
+          </div>
+          <div class="col-12 d-flex justify-content-end">
+            <button class="btn btn-outline-danger btn-sm remove-issue" type="button">
+              <i class="bi bi-x-circle me-1"></i>Remove Issue
+            </button>
+          </div>
+        </div>`;
+
+      item.querySelector('.issue-desc').addEventListener('input', e => {
+        const veh = state.vehicles.find(x => x.id === vehicle.id);
+        if (!veh) return;
+        const iss = (veh.issues || []).find(i => i.id === issue.id);
+        if (iss) { iss.description = e.target.value; saveState(); }
+      });
+      item.querySelector('.open-camera-btn').addEventListener('click', () => openCameraForIssue(vehicle.id, issue.id));
+
+      const galleryInput = item.querySelector('.gallery-input');
+      item.querySelector('.pick-file-btn').addEventListener('click', () => { galleryInput.value=''; galleryInput.click(); });
+      galleryInput.addEventListener('change', e => {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          const veh = state.vehicles.find(x => x.id === vehicle.id);
+          if (!veh) return;
+          const iss = (veh.issues || []).find(i => i.id === issue.id);
+          if (iss) { iss.imageData = ev.target.result; saveState(); renderVehicles(); }
+        };
+        reader.readAsDataURL(file);
+      });
+
+      const imgEl = item.querySelector('.image-preview');
+      if (imgEl) imgEl.addEventListener('click', () => { imageFullView.src = imgEl.src; imageViewModal.show(); });
+
+      const removeImgBtn = item.querySelector('.remove-image-btn');
+      if (removeImgBtn) removeImgBtn.addEventListener('click', () => {
+        const veh = state.vehicles.find(x => x.id === vehicle.id);
+        if (!veh) return;
+        const iss = (veh.issues || []).find(i => i.id === issue.id);
+        if (iss) { iss.imageData = null; saveState(); renderVehicles(); }
+      });
+
+      item.querySelector('.remove-issue').addEventListener('click', () => {
+        const veh = state.vehicles.find(x => x.id === vehicle.id);
+        if (!veh) return;
+        veh.issues = (veh.issues || []).filter(i => i.id !== issue.id);
+        saveState(); renderVehicles();
+      });
+
+      container.appendChild(item);
+    });
+  }
+
+  // ---------- SUPERVISORS ----------
+  function renderSupervisors() {
+    supervisorListEl.innerHTML = '';
+    if (state.supervisors.length === 0) {
+      supervisorListEl.innerHTML = emptyState('bi-person-badge', 'No supervisors added yet. Click "Add Supervisor" to assign one.');
+      updateSupervisorCount(); return;
+    }
+    state.supervisors.forEach(sup => {
+      const div = document.createElement('div');
+      div.className = 'supervisor-item';
+      div.dataset.id = sup.id;
+      const telLink = sup.mobile
+        ? `<a href="tel:${encodeURIComponent(sup.mobile)}" class="clickable-number"><i class="bi bi-telephone-fill"></i> ${escapeHtml(sup.mobile)}</a>` : '';
+      div.innerHTML = `
+        <div class="row g-3 align-items-end">
+          <div class="col-md-5 col-6">
+            <label class="small">Supervisor Name</label>
+            <input type="text" class="form-control form-control-sm sup-name" value="${escapeHtml(sup.name)}" placeholder="Full name">
+          </div>
+          <div class="col-md-5 col-6">
+            <label class="small">Mobile</label>
+            <input type="tel" class="form-control form-control-sm sup-mobile" value="${escapeHtml(sup.mobile)}" placeholder="Phone number">
+            ${telLink ? `<div class="mt-1">${telLink}</div>` : ''}
+          </div>
+          <div class="col-md-2 col-12 d-flex justify-content-end">
+            <button class="btn btn-outline-danger btn-sm remove-supervisor" type="button">
+              <i class="bi bi-x-circle"></i>
+            </button>
+          </div>
+        </div>`;
+
+      div.querySelector('.sup-name').addEventListener('input', e => {
+        const s = state.supervisors.find(x => x.id === div.dataset.id);
+        if (s) { s.name = e.target.value; saveState(); }
+      });
+      div.querySelector('.sup-mobile').addEventListener('input', e => {
+        const s = state.supervisors.find(x => x.id === div.dataset.id);
+        if (s) {
+          s.mobile = e.target.value;
+          const inp = e.target;
+          const linkContainer = inp.nextElementSibling;
+          let link = inp.parentElement.querySelector('.clickable-number');
+          if (inp.value) {
+            if (!link) {
+              const a = document.createElement('div');
+              a.className = 'mt-1';
+              a.innerHTML = `<a href="tel:${encodeURIComponent(inp.value)}" class="clickable-number"><i class="bi bi-telephone-fill"></i> ${escapeHtml(inp.value)}</a>`;
+              inp.parentElement.appendChild(a);
+            } else {
+              link.href = `tel:${encodeURIComponent(inp.value)}`;
+              link.innerHTML = `<i class="bi bi-telephone-fill"></i> ${escapeHtml(inp.value)}`;
+            }
+          } else if (linkContainer) { linkContainer.remove(); }
+          saveState();
+        }
+      });
+      div.querySelector('.remove-supervisor').addEventListener('click', () => {
+        state.supervisors = state.supervisors.filter(s => s.id !== div.dataset.id);
+        saveState(); renderSupervisors();
+      });
+      supervisorListEl.appendChild(div);
+    });
+    updateSupervisorCount();
+  }
+
+  function updateSupervisorCount() {
+    const c = state.supervisors.length;
+    supervisorCountBadge.innerHTML = `<i class="bi bi-people-fill"></i> ${c} Supervisor${c !== 1 ? 's' : ''}`;
+  }
+
+  // ---------- TOOLBAR ----------
+  function setupVehicleToolbar() {
+    vehicleSearchInput.addEventListener('input', () => {
+      vehicleSearchTerm = vehicleSearchInput.value;
+      vehicleSearchWrap.classList.toggle('has-value', vehicleSearchTerm.length > 0);
+      renderVehicles();
+    });
+    vehicleSearchClear.addEventListener('click', () => {
+      vehicleSearchInput.value = ''; vehicleSearchTerm = '';
+      vehicleSearchWrap.classList.remove('has-value');
+      renderVehicles(); vehicleSearchInput.focus();
+    });
+    vehicleTypeFilter.addEventListener('change', () => {
+      vehicleTypeFilterValue = vehicleTypeFilter.value;
+      renderVehicles();
+    });
+    vehicleSortSelect.addEventListener('change', () => {
+      vehicleSortValue = vehicleSortSelect.value;
+      renderVehicles();
+    });
+  }
+
+  // ---------- CAMERA ----------
+  // Camera handling is deliberately device-aware:
+  // 1) Ask the browser for a camera on THIS device.
+  // 2) After permission is granted, enumerate the actual devices.
+  // 3) Flip between real device IDs when available.
+  let cameraDevices = [];
+
+  async function refreshCameraDevices() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return [];
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      cameraDevices = devices.filter(d => d.kind === 'videoinput');
+      return cameraDevices;
+    } catch (e) {
+      console.warn('Could not enumerate cameras:', e);
+      cameraDevices = [];
+      return [];
+    }
+  }
+
+  function chooseCameraDevice(facingMode) {
+    if (!cameraDevices.length) return null;
+
+    const label = d => (d.label || '').toLowerCase();
+    const backWords = ['back', 'rear', 'environment', 'world', 'back camera'];
+    const frontWords = ['front', 'user', 'face', 'facetime', 'integrated', 'built-in'];
+
+    if (facingMode === 'environment') {
+      return cameraDevices.find(d => backWords.some(w => label(d).includes(w))) ||
+             cameraDevices[cameraDevices.length > 0 ? 0 : -1];
+    }
+
+    return cameraDevices.find(d => frontWords.some(w => label(d).includes(w))) ||
+           cameraDevices[cameraDevices.length > 0 ? 0 : -1];
+  }
+
+  async function startCamera(facingMode, preferredDeviceId = null) {
+    stopCamera();
+    cameraError.style.display = 'none';
+    cameraVideo.style.display = 'block';
+    cameraVideo.setAttribute('playsinline', '');
+    cameraVideo.muted = true;
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      showCameraError('Camera access is not supported by this browser. Please use “From Gallery”.');
+      return;
+    }
+
+    // Camera access requires a secure context (HTTPS or localhost) in normal browsers.
+    if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+      showCameraError('Camera access requires HTTPS (or localhost). Open this program through a secure connection and allow camera permission.');
+      return;
+    }
+
+    try {
+      let constraints;
+
+      if (preferredDeviceId) {
+        constraints = {
+          video: {
+            deviceId: { exact: preferredDeviceId },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          },
+          audio: false
+        };
+      } else {
+        // First request: use the physical camera of the device running this page.
+        // Do NOT require an exact facingMode because laptops/tablets may expose
+        // only one webcam and browsers differ in how they name it.
+        constraints = {
+          video: {
+            facingMode: { ideal: facingMode || 'environment' },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          },
+          audio: false
+        };
+      }
+
+      cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+      cameraVideo.srcObject = cameraStream;
+
+      // Permission is now granted, so labels/device IDs become available.
+      await refreshCameraDevices();
+
+      const activeTrack = cameraStream.getVideoTracks()[0];
+      const settings = activeTrack && activeTrack.getSettings ? activeTrack.getSettings() : {};
+      if (settings.deviceId) {
+        const active = cameraDevices.find(d => d.deviceId === settings.deviceId);
+        if (active) cameraVideo.dataset.deviceId = active.deviceId;
+      }
+
+      await cameraVideo.play();
+    } catch (err) {
+      console.error('Camera error:', err);
+
+      let msg = 'Unable to access the camera. ';
+      if (err.name === 'NotAllowedError' || err.name === 'SecurityError') {
+        msg += 'Camera permission was denied. Allow camera access for this website/device and try again.';
+      } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        msg += 'No camera was found on this device. You can use “From Gallery”.';
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        msg += 'The camera is busy or unavailable. Close other apps using the camera and try again.';
+      } else if (err.name === 'OverconstrainedError') {
+        msg += 'The selected camera is unavailable. Trying the device default camera…';
+        // Fallback to any available camera instead of failing.
+        try {
+          cameraStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          cameraVideo.srcObject = cameraStream;
+          await refreshCameraDevices();
+          await cameraVideo.play();
+          return;
+        } catch (fallbackErr) {
+          console.error('Camera fallback error:', fallbackErr);
+          msg += ' The device camera could not be opened.';
+        }
+      } else {
+        msg += err.message || 'Unknown camera error.';
+      }
+
+      showCameraError(msg);
+    }
+  }
+
+  function showCameraError(msg) {
+    cameraVideo.style.display = 'none';
+    cameraError.style.display = 'block';
+    cameraError.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-2"></i>${escapeHtml(msg)}`;
+  }
+
+  function stopCamera() {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => {
+        try { track.stop(); } catch (_) {}
+      });
+      cameraStream = null;
+    }
+    if (cameraVideo) {
+      cameraVideo.pause();
+      cameraVideo.srcObject = null;
+      delete cameraVideo.dataset.deviceId;
+    }
+  }
+
+  function openCameraForIssue(vehicleId, issueId) {
+    activeIssueRef = { vehicleId, issueId };
+    currentFacingMode = 'environment';
+    cameraError.style.display = 'none';
+    cameraModal.show();
+
+    // Start only after the modal has been shown, so the video element has
+    // real dimensions and browser permission UI is associated with this action.
+    const launch = () => startCamera(currentFacingMode);
+    if (cameraModalEl.classList.contains('show')) setTimeout(launch, 100);
+    else cameraModalEl.addEventListener('shown.bs.modal', launch, { once: true });
+  }
+
+  async function switchCamera() {
+    if (!cameraStream) {
+      currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+      await startCamera(currentFacingMode);
+      return;
+    }
+
+    const currentId = cameraVideo.dataset.deviceId ||
+      (cameraStream.getVideoTracks()[0].getSettings &&
+       cameraStream.getVideoTracks()[0].getSettings().deviceId);
+
+    await refreshCameraDevices();
+
+    let nextDevice = null;
+
+    if (cameraDevices.length > 1) {
+      const currentIndex = cameraDevices.findIndex(d => d.deviceId === currentId);
+      if (currentIndex >= 0) {
+        // On devices with multiple cameras, actually move to the next physical camera.
+        nextDevice = cameraDevices[(currentIndex + 1) % cameraDevices.length];
+      } else {
+        nextDevice = chooseCameraDevice(
+          currentFacingMode === 'environment' ? 'user' : 'environment'
+        );
+      }
+    }
+
+    currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+    await startCamera(currentFacingMode, nextDevice ? nextDevice.deviceId : null);
+  }
+
+  function capturePhoto() {
+    if (!cameraVideo.videoWidth || !cameraVideo.videoHeight || !cameraStream) {
+      alert('Camera is not ready yet. Please wait a moment and try again.');
+      return;
+    }
+
+    const w = cameraVideo.videoWidth;
+    const h = cameraVideo.videoHeight;
+    cameraCanvas.width = w;
+    cameraCanvas.height = h;
+
+    const ctx = cameraCanvas.getContext('2d', { alpha: false });
+    if (!ctx) {
+      alert('Could not prepare the camera image.');
+      return;
+    }
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    // Do not mirror rear/environment cameras. Mirror only the front/user camera,
+    // matching the normal selfie preview behavior.
+    if (currentFacingMode === 'user') {
+      ctx.translate(w, 0);
+      ctx.scale(-1, 1);
+    }
+
+    ctx.drawImage(cameraVideo, 0, 0, w, h);
+
+    const imageData = cameraCanvas.toDataURL('image/jpeg', 0.82);
+
+    if (activeIssueRef) {
+      const veh = state.vehicles.find(x => x.id === activeIssueRef.vehicleId);
+      if (veh) {
+        const iss = (veh.issues || []).find(i => i.id === activeIssueRef.issueId);
+        if (iss) {
+          iss.imageData = imageData;
+          saveState();
+          renderVehicles();
+        }
+      }
+    }
+
+    cameraModal.hide();
+  }
+
+  // ============================================================
+  // =================== PDF GENERATION =========================
+  // ============================================================
+  function buildPdfDom() {
+    const now = new Date();
+    const reportId = 'STR-' + now.getFullYear() +
+      String(now.getMonth()+1).padStart(2,'0') +
+      String(now.getDate()).padStart(2,'0') + '-' +
+      Math.random().toString(36).substring(2, 6).toUpperCase();
+    const generatedOn = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+    const period = now.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+
+    const totalVehicles = state.vehicles.length;
+    let totalIssues = 0, totalPhotos = 0;
+    state.vehicles.forEach(v => {
+      const issues = v.issues || [];
+      totalIssues += issues.length;
+      totalPhotos += issues.filter(i => i.imageData).length;
+    });
+    const totalSupervisors = state.supervisors.length;
+    const preparedBy = state.supervisors.find(s => s.name && s.name.trim())?.name || 'Supervisor';
+
+    const logoHtml = `<img src="${cachedLogoDataUrl}" alt="Logo">`;
+
+    const cover = `
+      <div class="pdf-cover-inner" style="page-break-after:always;break-after:page;">
+        <div class="pdf-cover-header">
+          <div class="pdf-cover-logo">${logoHtml}</div>
+          <div>
+            <h1 class="pdf-cover-title">School Transport<br>Maintenance Report</h1>
+            <p class="pdf-cover-sub">Official Inspection Document</p>
+            <p class="pdf-cover-school">Prepared by ${escapeHtml(preparedBy)}</p>
+          </div>
+        </div>
+        <div class="pdf-cover-body">
+          <h3 class="pdf-section-title">Report Information</h3>
+          <div class="pdf-info-grid">
+            <div class="pdf-info-item">
+              <span class="pdf-info-label">Report ID</span>
+              <span class="pdf-info-value">${reportId}</span>
+            </div>
+            <div class="pdf-info-item">
+              <span class="pdf-info-label">Generated On</span>
+              <span class="pdf-info-value">${generatedOn}</span>
+            </div>
+            <div class="pdf-info-item">
+              <span class="pdf-info-label">Report Period</span>
+              <span class="pdf-info-value">${period}</span>
+            </div>
+            <div class="pdf-info-item">
+              <span class="pdf-info-label">Prepared By</span>
+              <span class="pdf-info-value">${escapeHtml(preparedBy)}</span>
+            </div>
+          </div>
+
+          <h3 class="pdf-section-title">Summary</h3>
+          <div class="pdf-summary-strip">
+            <div class="pdf-stat">
+              <div class="pdf-stat-value">${totalVehicles}</div>
+              <div class="pdf-stat-label">Vehicles</div>
+            </div>
+            <div class="pdf-stat">
+              <div class="pdf-stat-value">${totalIssues}</div>
+              <div class="pdf-stat-label">Issues Logged</div>
+            </div>
+            <div class="pdf-stat">
+              <div class="pdf-stat-value">${totalSupervisors}</div>
+              <div class="pdf-stat-label">Supervisors</div>
+            </div>
+            <div class="pdf-stat">
+              <div class="pdf-stat-value">${totalPhotos}</div>
+              <div class="pdf-stat-label">Photos</div>
+            </div>
+          </div>
+
+          <div class="pdf-legend">
+            <strong>Purpose:</strong> This document records all vehicle maintenance issues reported during the inspection period. Each section below details the vehicle and driver information, followed by every logged issue with photographic evidence where applicable.
+          </div>
+
+          <div class="pdf-signature-row">
+            <div class="pdf-signature-block">
+              <div class="pdf-signature-line">Supervisor Signature</div>
+              <div class="pdf-signature-role">Maintenance Supervisor</div>
+            </div>
+            <div class="pdf-signature-block">
+              <div class="pdf-signature-line">Principal Signature</div>
+              <div class="pdf-signature-role">School Principal</div>
+            </div>
+          </div>
+
+          <div class="pdf-footer">
+            <span class="pdf-footer-brand">School Transport · Maintenance Report</span>
+            <span>Page 1</span>
+          </div>
+        </div>
+      </div>`;
+
+    let bodyHtml = '';
+    if (totalVehicles === 0) {
+      bodyHtml = `<div class="pdf-no-issues" style="padding:24px;text-align:center;">No vehicles have been added to this report.</div>`;
+    } else {
+      state.vehicles.forEach((v, idx) => {
+        const issueCount = (v.issues || []).length;
+        let issuesHtml = '';
+        if (issueCount === 0) {
+          issuesHtml = `<div class="pdf-no-issues">No maintenance issues recorded for this vehicle.</div>`;
+        } else {
+          issuesHtml = v.issues.map((iss, i) => {
+            const desc = (iss.description || '').trim();
+            const photoHtml = iss.imageData
+              ? `<div class="pdf-issue-photo"><img src="${iss.imageData}" alt="issue photo"></div>`
+              : `<div class="pdf-issue-photo"><span class="no-photo">No photo</span></div>`;
+            return `
+              <div class="pdf-issue-row">
+                <div class="pdf-issue-content">
+                  <div class="pdf-issue-text">
+                    <div class="pdf-issue-label">Issue ${i + 1}</div>
+                    <div class="pdf-issue-description ${desc ? '' : 'empty'}">${desc ? escapeHtml(desc) : 'No description provided.'}</div>
+                  </div>
+                  ${photoHtml}
+                </div>
+              </div>`;
+          }).join('');
+        }
+        bodyHtml += `
+          <div class="pdf-vehicle-block">
+            <div class="pdf-vehicle-head">
+              <div class="pdf-vehicle-head-left">
+                <div class="pdf-vehicle-head-badge">${idx + 1}</div>
+                <div class="pdf-vehicle-head-main">
+                  <div class="pdf-vehicle-head-no">${escapeHtml(v.vehicleNumber || 'Untitled Vehicle')}</div>
+                  <div class="pdf-vehicle-head-driver">${escapeHtml(v.driverName || 'No driver assigned')}${v.vehicleType ? ' · ' + escapeHtml(v.vehicleType) : ''}</div>
+                </div>
+              </div>
+              <div class="pdf-vehicle-head-count">${issueCount} issue${issueCount !== 1 ? 's' : ''}</div>
+            </div>
+            <div class="pdf-vehicle-fields">
+              <div class="pdf-vehicle-field">
+                <span class="pdf-vehicle-field-label">Vehicle No.</span>
+                <span class="pdf-vehicle-field-value">${escapeHtml(v.vehicleNumber || '—')}</span>
+              </div>
+              <div class="pdf-vehicle-field">
+                <span class="pdf-vehicle-field-label">Type</span>
+                <span class="pdf-vehicle-field-value">${escapeHtml(v.vehicleType || '—')}</span>
+              </div>
+              <div class="pdf-vehicle-field">
+                <span class="pdf-vehicle-field-label">Driver</span>
+                <span class="pdf-vehicle-field-value">${escapeHtml(v.driverName || '—')}</span>
+              </div>
+              <div class="pdf-vehicle-field">
+                <span class="pdf-vehicle-field-label">Mobile</span>
+                <span class="pdf-vehicle-field-value">${escapeHtml(v.mobileNumber || '—')}</span>
+              </div>
+            </div>
+            <div class="pdf-issues-block">
+              <div class="pdf-issues-block-title">Maintenance Issues</div>
+              ${issuesHtml}
+            </div>
+          </div>`;
+      });
+    }
+
+    let supervisorsHtml = '';
+    if (totalSupervisors === 0) {
+      supervisorsHtml = `<div class="pdf-no-issues">No supervisors were assigned to this report.</div>`;
+    } else {
+      supervisorsHtml = `<div class="pdf-supervisors-list">` +
+        state.supervisors.map(s => `
+          <div class="pdf-supervisor-card">
+            <div class="pdf-supervisor-name">${escapeHtml(s.name || 'Unnamed Supervisor')}</div>
+            <div class="pdf-supervisor-mobile">${escapeHtml(s.mobile || 'No contact number')}</div>
+          </div>`).join('') + `</div>`;
+    }
+
+    const body = `
+      <div class="pdf-body">
+        <div class="pdf-body-header">
+          <div class="pdf-body-header-left">
+            <div class="pdf-body-logo">${logoHtml}</div>
+            <div>
+              <h2 class="pdf-body-title">School Transport · Maintenance Report</h2>
+              <p class="pdf-body-sub">Report ID: ${reportId} · Generated ${generatedOn}</p>
+            </div>
+          </div>
+          <div class="pdf-body-meta">
+            <div>Total Vehicles: <strong>${totalVehicles}</strong></div>
+            <div>Total Issues: <strong>${totalIssues}</strong></div>
+          </div>
+        </div>
+
+        ${bodyHtml}
+
+        <div class="pdf-supervisors-block">
+          <div class="pdf-supervisors-head">Supervisors on Record (${totalSupervisors})</div>
+          ${supervisorsHtml}
+        </div>
+
+        <div class="pdf-final-footer">
+          <span>— End of Report —</span>
+          <span>Maintenance report by supervisor · School Transport</span>
+        </div>
+      </div>`;
+
+    return cover + body;
+  }
+
+  // Helper: wait for all images inside an element to load
+  function waitForImages(container) {
+    const imgs = container.querySelectorAll('img');
+    return Promise.all(Array.from(imgs).map(img => {
+      if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+      return new Promise(res => {
+        img.onload = res;
+        img.onerror = res;
+        setTimeout(res, 3000);
+      });
+    }));
+  }
+
+  async function exportPDF() {
+    const btn = document.getElementById('exportPdfBtn');
+    const originalHtml = btn.innerHTML;
+    const renderArea = document.getElementById('pdfRenderArea');
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Generating…';
+
+    try {
+      if (!state.vehicles.length) {
+        throw new Error('Add at least one vehicle before exporting.');
+      }
+
+      // Keep everything self-contained for html2canvas.
+      if (!cachedLogoDataUrl) await preloadLogo();
+
+      renderArea.innerHTML = buildPdfDom();
+      document.body.classList.add('pdf-rendering');
+
+      // Make sure the browser has actually laid out the export DOM.
+      renderArea.style.left = '0px';
+      renderArea.style.visibility = 'visible';
+      renderArea.style.opacity = '1';
+      renderArea.style.width = '794px';
+
+      void renderArea.offsetHeight;
+
+      await waitForImages(renderArea);
+
+      // Give fonts/images one rendering cycle to settle.
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready.catch(() => {});
+      }
+      await new Promise(resolve => requestAnimationFrame(() =>
+        requestAnimationFrame(resolve)
+      ));
+
+      const width = Math.max(794, Math.ceil(renderArea.scrollWidth));
+      const height = Math.ceil(renderArea.scrollHeight);
+
+      if (height < 50) {
+        throw new Error('The report did not render any content.');
+      }
+
+      console.log('[PDF] Rendering:', width + ' x ' + height);
+
+      if (typeof html2canvas !== 'function') {
+        throw new Error('PDF renderer library failed to load. Check your internet connection and reload the page.');
+      }
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        throw new Error('jsPDF library failed to load. Reload the page and try again.');
+      }
+
+      // Direct html2canvas -> jsPDF is more reliable than html2pdf's cloned DOM
+      // for this application, especially with hidden/off-screen containers and
+      // base64 photos.
+      const canvas = await html2canvas(renderArea, {
+        scale: Math.min(2, window.devicePixelRatio || 1.5),
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: '#ffffff',
+        logging: false,
+        imageTimeout: 15000,
+        scrollX: 0,
+        scrollY: 0,
+        width,
+        height,
+        windowWidth: width,
+        windowHeight: Math.max(window.innerHeight, height)
+      });
+
+      if (!canvas || canvas.width < 10 || canvas.height < 10) {
+        throw new Error('The PDF canvas was empty. Please try again.');
+      }
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+        compress: true
+      });
+
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const margin = 8;
+      const usableWidth = pageWidth - (margin * 2);
+      const usableHeight = pageHeight - (margin * 2);
+
+      // Render the complete report at A4 width, then slice the tall canvas
+      // into exact A4-height page sections without stretching content.
+      const pxPerMm = canvas.width / usableWidth;
+      const pagePixelHeight = Math.floor(usableHeight * pxPerMm);
+
+      let sourceY = 0;
+      let pageNumber = 0;
+
+      while (sourceY < canvas.height) {
+        const sliceHeight = Math.min(pagePixelHeight, canvas.height - sourceY);
+
+        const pageCanvas = document.createElement('canvas');
+        pageCanvas.width = canvas.width;
+        pageCanvas.height = sliceHeight;
+
+        const pageCtx = pageCanvas.getContext('2d', { alpha: false });
+        pageCtx.fillStyle = '#ffffff';
+        pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+        pageCtx.drawImage(
+          canvas,
+          0, sourceY, canvas.width, sliceHeight,
+          0, 0, canvas.width, sliceHeight
+        );
+
+        const imgData = pageCanvas.toDataURL('image/jpeg', 0.94);
+
+        if (pageNumber > 0) pdf.addPage();
+        const renderedHeightMm = sliceHeight / pxPerMm;
+        pdf.addImage(
+          imgData,
+          'JPEG',
+          margin,
+          margin,
+          usableWidth,
+          renderedHeightMm,
+          undefined,
+          'FAST'
+        );
+
+        pageNumber++;
+        sourceY += sliceHeight;
+      }
+
+      if (!pageNumber) {
+        throw new Error('No PDF pages were produced.');
+      }
+
+      const filename = `School_Transport_Report_${new Date().toISOString().slice(0,10)}.pdf`;
+      pdf.save(filename);
+    } catch (err) {
+      console.error('PDF export error:', err);
+      alert('Could not generate PDF.\n\nDetails: ' +
+        (err && err.message ? err.message : 'Unknown error'));
+    } finally {
+      document.body.classList.remove('pdf-rendering');
+      renderArea.style.left = '-10000px';
+      renderArea.style.visibility = 'visible';
+      renderArea.style.opacity = '1';
+      renderArea.innerHTML = '';
+      btn.disabled = false;
+      btn.innerHTML = originalHtml;
+    }
+  }
+
+  function clearAll() {
+    if (confirm('Delete all report data? This cannot be undone.')) {
+      state = { vehicles: [], supervisors: [] };
+      saveState();
+      vehicleSearchInput.value = ''; vehicleSearchTerm = '';
+      vehicleSearchWrap.classList.remove('has-value');
+      vehicleTypeFilterValue = ''; vehicleSortValue = 'recent';
+      vehicleSortSelect.value = 'recent';
+      refreshVehicleTypeFilter();
+      renderVehicles(); renderSupervisors();
+    }
+  }
+
+  // ---------- ADD ----------
+  function addVehicle() {
+    state.vehicles.push({
+      id: uid(), vehicleNumber: '', vehicleType: '', driverName: '', mobileNumber: '', issues: []
+    });
+    saveState();
+    refreshVehicleTypeFilter();
+    renderVehicles();
+    setTimeout(() => {
+      const last = vehicleListEl.querySelector('.vehicle-group:last-child input');
+      if (last) last.focus();
+    }, 60);
+  }
+  function addIssueToVehicle(vehicleId) {
+    const veh = state.vehicles.find(x => x.id === vehicleId);
+    if (!veh) return;
+    if (!Array.isArray(veh.issues)) veh.issues = [];
+    veh.issues.push({ id: uid(), description: '', imageData: null });
+    saveState();
+    renderVehicles();
+    setTimeout(() => {
+      const group = vehicleListEl.querySelector(`.vehicle-group[data-vehicle-id="${vehicleId}"]`);
+      if (group) {
+        const items = group.querySelectorAll('.issue-item .issue-desc');
+        if (items.length) items[items.length - 1].focus();
+      }
+    }, 60);
+  }
+  function addSupervisor() {
+    state.supervisors.push({ id: uid(), name:'', mobile:'' });
+    saveState(); renderSupervisors();
+  }
+
+  function init() {
+    cameraModal = new bootstrap.Modal(cameraModalEl);
+    imageViewModal = new bootstrap.Modal(imageViewModalEl);
+    preloadLogo();
+    loadState();
+    refreshVehicleTypeFilter();
+    setupVehicleToolbar();
+    renderVehicles(); renderSupervisors();
+    document.getElementById('addVehicleBtn').addEventListener('click', addVehicle);
+    document.getElementById('addSupervisorBtn').addEventListener('click', addSupervisor);
+    document.getElementById('exportPdfBtn').addEventListener('click', exportPDF);
+    document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+    document.getElementById('capturePhotoBtn').addEventListener('click', capturePhoto);
+    document.getElementById('switchCameraBtn').addEventListener('click', switchCamera);
+    cameraModalEl.addEventListener('hidden.bs.modal', () => { stopCamera(); activeIssueRef = null; });
+  }
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
